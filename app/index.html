@@ -65,6 +65,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- endbuild -->
 
   <template is="dom-bind" id="app">
+    <firebase-auth
+      auto-login
+      redirect
+      location="https://polymertest12345.firebaseio.com"
+      provider="anonymous"
+      on-error="onFirebaseError"
+      on-login="onFirebaseLogin"></firebase-auth>
 
     <paper-drawer-panel id="paperDrawerPanel">
       <!-- Drawer Scroll Header Panel -->
@@ -191,7 +198,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <section data-route="books">
               <paper-material elevation="1">
-                <p>Hello, World!</p>
+                <ski-passes-group-list></ski-passes-group-list>
               </paper-material>
             </section>
           </iron-pages>

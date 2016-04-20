@@ -81,4 +81,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     app.$.paperDrawerPanel.closeDrawer();
   };
 
+  app.onFirebaseError = function(e) {
+    this.$.errorToast.text = e.detail.message;
+    this.$.errorToast.show();
+  };
+  app.onFirebaseLogin = function(e) {
+    this.ref = new Firebase(this.firebaseURL + '/user/' + e.detail.user.uid);
+    this.ref.on('value', function(snapshot) {
+      app.updateItems(snapshot);
+    });
+  };
+
 })(document);

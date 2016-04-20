@@ -1,13 +1,37 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
 <link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-collection.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-document.html">
 
 <dom-module id="ski-passes-group-list">
   <template>
-    <ul>
-      <template is="dom-repeat" items="{{items}}">
-        <li><span>{{item}}</span></li>
-      </template>
-    </ul>
+
+    <firebase-collection data="{{data}}"
+                         location="https://polymertest12345.firebaseio.com/skiPassesGroupList"></firebase-collection>
+
+
+    <paper-input type="number" value="{{newItemFirstNumber::input}}"
+                 placeholder="Enter first number here..."></paper-input>
+    <paper-input type="number" value="{{newItemLastNumber::input}}"
+                 placeholder="Enter last number here..."></paper-input>
+    <paper-input type="number" value="{{newItemNumberOfRuns::input}}"
+                 placeholder="Enter the number of runs here..."></paper-input>
+    <paper-button on-click="addItem">Add</paper-button>
+
+    <template is="dom-repeat" items="{{data}}">
+      <div>
+        <paper-icon-button icon="delete" on-click="deleteItem"></paper-icon-button>
+        <span>{{item.firstNumber}}</span>
+        <span>{{item.lastNumber}}</span>
+        <span>{{item.numberOfRuns}}</span>
+      </div>
+    </template>
+
+
+
   </template>
 
   <script>
@@ -16,6 +40,8 @@
 
       Polymer({
         is: "ski-passes-group-list",
+        //app.baseUrl = 'https://polymertest12345.firebaseapp.com/';
+        ref: new Firebase('https://polymertest12345.firebaseio.com/skiPassesGroupList'),
         properties: {
           items: {
             type: Array,
@@ -23,15 +49,18 @@
           }
         },
 
-        ready: function () {
-          this.items = [
-            'Responsive Web App boilerplate',
-            'Iron Elements and Paper Elements',
-            'End-to-end Build Tooling (including Vulcanize)',
-            'Unit testing with Web Component Tester',
-            'Routing with Page.js',
-            'Offline support with the Platinum Service Worker Elements'
-          ];
+        addItem: function (event) {
+          event.preventDefault(); // Don't send the form!
+          this.ref.push({
+            firstNumber: this.newItemFirstNumber,
+            lastNumber: this.newItemLastNumber,
+            numberOfRuns: this.newItemNumberOfRuns
+          });
+          //firstNumber = '';
+        },
+
+        deleteItem: function () {
+          this.ref.child(event.model.item.__firebaseKey__).remove();
         }
       })
     })()

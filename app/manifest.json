@@ -36,5 +36,13 @@
       }],
   "background_color": "#3E4EB8",
   "display": "standalone",
-  "theme_color": "#2E3AA1"
+  "theme_color": "#2E3AA1",
+  "start_url": "/?homescreen=1",
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://polymertest12345.firebaseapp.com",
+      "id": "com.example.polymertest12345"
+    }
+  ]
 }

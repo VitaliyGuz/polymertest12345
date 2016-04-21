@@ -9,16 +9,31 @@
 <dom-module id="ski-passes-group-list">
   <template>
 
-    <firebase-collection data="{{data}}"
+    <firebase-collection id="firebaseId" data="{{data}}"
                          location="https://polymertest12345.firebaseio.com/skiPassesGroupList"></firebase-collection>
 
 
-    <paper-input type="number" value="{{newItemFirstNumber::input}}"
-                 placeholder="Enter first number here..."></paper-input>
-    <paper-input type="number" value="{{newItemLastNumber::input}}"
-                 placeholder="Enter last number here..."></paper-input>
-    <paper-input type="number" value="{{newItemNumberOfRuns::input}}"
-                 placeholder="Enter the number of runs here..."></paper-input>
+    <paper-input-container>
+      <label>Enter first number here...</label> +
+      <input
+        is="iron-input"
+        bind-value="{{newItem.firstNumber}}">
+      </input>
+    </paper-input-container>
+    <paper-input-container>
+      <label>Enter last number here...</label> +
+      <input
+        is="iron-input"
+        bind-value="{{newItem.lastNumber}}">
+      </input>
+    </paper-input-container>
+    <paper-input-container>
+      <label>Enter the number of runs here...</label> +
+      <input
+        is="iron-input"
+        bind-value="{{newItem.numberOfRuns}}">
+      </input>
+    </paper-input-container>
     <paper-button on-click="addItem">Add</paper-button>
 
     <template is="dom-repeat" items="{{data}}">
@@ -29,7 +44,6 @@
         <span>{{item.numberOfRuns}}</span>
       </div>
     </template>
-
 
 
   </template>
@@ -46,21 +60,34 @@
           items: {
             type: Array,
             notify: true
+          },
+          newItem: {
+            type: Object,
+            value: function () {
+              return {'firstNumber': "", 'lastNumber': "", 'numberOfRuns': ""};
+            }
           }
         },
 
         addItem: function (event) {
           event.preventDefault(); // Don't send the form!
-          this.ref.push({
-            firstNumber: this.newItemFirstNumber,
-            lastNumber: this.newItemLastNumber,
-            numberOfRuns: this.newItemNumberOfRuns
-          });
+          /*this.newItem = {
+           firstNumber: 10,
+           lastNumber: 20,
+           numberOfRuns: 30
+           };*/
+          this.$.firebaseId.add(this.newItem);
+          /*this.ref.push({
+           firstNumber: this.newItemFirstNumber,
+           lastNumber: this.newItemLastNumber,
+           numberOfRuns: this.newItemNumberOfRuns
+           });*/
           //firstNumber = '';
         },
 
         deleteItem: function () {
-          this.ref.child(event.model.item.__firebaseKey__).remove();
+          //this.ref.child(event.model.item.__firebaseKey__).remove();
+          this.$.firebaseId.remove(event.model.item);
         }
       })
     })()
